@@ -1,10 +1,12 @@
 from flask_script import Manager
 from sqlalchemy import Column, String, Integer, create_engine
 from flask_migrate import Migrate, MigrateCommand
+from dotenv import load_dotenv
 
-from app import create_app
+from app.app import create_app
 from models import db
 
+load_dotenv()
 app = create_app()
 
 migrate = Migrate(app, db)
