@@ -1,0 +1,22 @@
+# Ignore node_modules folder
+/frontend/node_modules
+
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# pyenv
+.python-version
