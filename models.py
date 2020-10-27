@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy import Column, String, Integer, Date
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
@@ -26,8 +26,8 @@ class Actor(db.Model):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(80), unique=True, nullable=False)
-    date_of_birth = Column(DateTime, nullable=False)
-    gender = Column(String, nullable=False)
+    date_of_birth = Column(Date, nullable=False)
+    gender = Column(String(10), nullable=False)
     movies = db.relationship('Movie', secondary=actor_movie, backref=db.backref('movies', lazy=True))
 
     def format(self):
@@ -35,10 +35,10 @@ class Actor(db.Model):
             'id': self.id,
             'name': self.name,
             'gender': self.gender,
-            'age': self.age
+            'date_of_birth': self.date_of_birth
         }
 
-    def insert(self):
+    def save(self):
         db.session.add(self)
         db.session.commit()
 
@@ -46,7 +46,6 @@ class Actor(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    @staticmethod
     def update(self):
         db.session.commit()
 
@@ -55,9 +54,9 @@ class Movie(db.Model):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(120), unique=True, nullable=False)
-    release_date = Column(DateTime, nullable=False)
+    release_date = Column(Date, nullable=False)
 
-    def insert(self):
+    def save(self):
         db.session.add(self)
         db.session.commit()
 
@@ -65,7 +64,6 @@ class Movie(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    @staticmethod
     def update(self):
         db.session.commit()
 
