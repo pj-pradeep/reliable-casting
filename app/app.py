@@ -5,6 +5,7 @@ from flask_cors import CORS
 from datetime import datetime
 
 from models import Actor, Movie, setup_db
+from auth.auth import AuthError, requires_auth
 
 def create_app(test_config=None):
 
@@ -100,7 +101,7 @@ def create_app(test_config=None):
         }), 200
 
 
-    @app.route('/api/actors/<int:actor_id?', methods=['PATCH'])
+    @app.route('/api/actors/<int:actor_id>', methods=['PATCH'])
     def update_actor(actor_id):
         actor = Actor.query.get(actor_id)
 
@@ -203,7 +204,7 @@ def create_app(test_config=None):
         }), 200
 
 
-    @app.route('/api/movies/<int:movie_id?', methods=['PATCH'])
+    @app.route('/api/movies/<int:movie_id>', methods=['PATCH'])
     def update_movie(movie_id):
         movie = Movie.query.get(movie_id)
 
