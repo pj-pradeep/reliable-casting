@@ -5,10 +5,22 @@ from jose import jwt
 from urllib.request import urlopen
 from os import environ
 
+from dotenv import load_dotenv, find_dotenv
 
+
+ENV_FILE = find_dotenv()
+if ENV_FILE:
+    load_dotenv(ENV_FILE)
+
+AUTH0_CALLBACK_URL = environ.get('AUTH0_CALLBACK_URL','http://localhost:5000/callback')
+AUTH0_CLIENT_ID = environ.get('AUTH0_CLIENT_ID','rv3llI8BPjRILs8KcB58EWaokA4d6NHx')
+AUTH0_CLIENT_SECRET = environ.get('AUTH0_CLIENT_SECRET','F_u59lANTwIOP386dWVDeiPEYvfGeTL4gqfTenP17fLx7kV1R6p7EVxqVXAsXIbD')
 AUTH0_DOMAIN = environ.get('AUTH0_DOMAIN', 'dev-wr0-fzj9.us.auth0.com')
+AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
+AUTH0_AUDIENCE = environ.get('AUTH0_AUDIENCE', 'https://api.reliable-casting.com')
 ALGORITHMS = ['RS256']
-API_AUDIENCE = environ.get('API_AUDIENCE', 'reliable-casting')
+
+
 
 ## AuthError Exception
 '''
@@ -74,7 +86,10 @@ def get_token_auth_header():
 '''
 def check_permissions(permission, payload):
     if 'permissions' not in payload:
-        abort(400)
+        raise AuthError({
+            'code': 'invalid_claims',
+            'description': 'JWT does not have right permissions.'
+        }, 400)
 
     if permission not in payload['permissions']:
         raise AuthError({
@@ -126,7 +141,7 @@ def verify_decode_jwt(token):
                 token,
                 rsa_key,
                 algorithms=ALGORITHMS,
-                audience=API_AUDIENCE,
+                audience=AUTH0_AUDIENCE,
                 issuer=f'https://{AUTH0_DOMAIN}/'
             )
 
@@ -168,8 +183,16 @@ def requires_auth(permission=''):
         @wraps(f)
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
-            payload = verify_decode_jwt(token)
+            try:
+                payload = verify_decode_jwt(token)
+            except Exception:
+                raise AuthError({
+                    'code': 'invalid_token',
+                    'description': 'Access Denied. Token not valid.'
+                }, 401)
+
             check_permissions(permission, payload)
+
             return f(payload, *args, **kwargs)
 
         return wrapper

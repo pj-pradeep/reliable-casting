@@ -4,8 +4,17 @@ from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 from datetime import datetime
 
+from flask import redirect
+from flask import render_template, make_response
+from flask import session
+from flask import url_for
+
 from models import Actor, Movie, setup_db
-from auth.auth import AuthError, requires_auth
+from auth.auth import *
+from authlib.integrations.flask_client import OAuth
+from werkzeug.exceptions import HTTPException
+from six.moves.urllib.parse import urlencode
+
 
 def create_app(test_config=None):
 
@@ -13,25 +22,67 @@ def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_object(Config)
     setup_db(app)
-    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(app)
+
+    oauth = OAuth(app)
+
+    auth0 = oauth.register(
+        'auth0',
+        client_id=AUTH0_CLIENT_ID,
+        client_secret=AUTH0_CLIENT_SECRET,
+        api_base_url=AUTH0_BASE_URL,
+        access_token_url=AUTH0_BASE_URL + '/oauth/token',
+        authorize_url=AUTH0_BASE_URL + '/authorize',
+        client_kwargs={
+            'scope': 'openid profile email',
+        },
+    )
 
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, True')
         response.headers.add('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE')
-        response.headers.add('Content-Type', 'application/json')
         return response
            
 
     @app.route('/')
     def index():
-        return jsonify({
-            'message': 'Reliable Casting Agency - a Udacity capstone project',
-            'success': True
-        })
+        return render_template('home.html')
+
+    @app.route('/login')
+    def login():
+        return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
+
+    @app.route('/logout')
+    def logout():
+        session.clear()
+        params = {'returnTo': url_for('index', _external=True), 'client_id': AUTH0_CLIENT_ID}
+        return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
+
+    @app.route('/callback')
+    def callback_handling():
+        # Handles response from token endpoint
+        
+        result = auth0.authorize_access_token()
+        resp = auth0.get('userinfo')
+        userinfo = resp.json()
+        token = result.get('access_token')
+
+        # Store the user information in flask session.
+        session['jwt_token'] = token
+        session['jwt_payload'] = userinfo
+        session['profile'] = {
+            'user_id': userinfo['sub'],
+            'name': userinfo['name'],
+            'picture': userinfo['picture']
+        }
+               
+        return render_template('dashboard.html', token=token, userInfo=userinfo)
 
     @app.route('/api/actors', methods=['POST'])
-    def create_new_actor():
+    @requires_auth('post:actors')
+    def create_new_actor(payload):
         request_body = request.get_json()
 
         if not request_body:
@@ -60,7 +111,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors', methods=['GET'])
-    def list_all_actors():
+    def list_all_actors(payload):
         actors = Actor.query.all()
 
         if actors is None or len(actors) == 0:
@@ -73,7 +124,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors/<int:actor_id>', methods=['GET'])
-    def get_actor_by_id(actor_id):
+    def get_actor_by_id(payload, actor_id):
         actor = Actor.query.get(actor_id)
 
         if actor is None:
@@ -86,7 +137,7 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/api/actors/<int:actor_id>', methods=['DELETE'])
-    def delete_actor(actor_id):
+    def delete_actor(payload, actor_id):
         actor = Actor.query.get(actor_id)
 
         if actor is None:
@@ -102,7 +153,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors/<int:actor_id>', methods=['PATCH'])
-    def update_actor(actor_id):
+    def update_actor(payload, actor_id):
         actor = Actor.query.get(actor_id)
 
         if actor is None:
@@ -137,7 +188,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies', methods=['POST'])
-    def create_movie():
+    def create_movie(payload):
         request_body = request.get_json()
 
         if not request_body:
@@ -163,7 +214,7 @@ def create_app(test_config=None):
         }), 201
 
     @app.route('/api/movies', methods=['GET'])
-    def get_movies():
+    def get_movies(payload):
         movies = Movie.query.all()
 
         if movies is None or len(movies) == 0:
@@ -176,7 +227,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies/<int:movie_id>', methods=['GET'])
-    def get_movie_by_id(movie_id):
+    def get_movie_by_id(payload, movie_id):
         movie = Movie.query.get(movie_id)
 
         if movie is None:
@@ -189,7 +240,7 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/api/movies/<int:movie_id>', methods=['DELETE'])
-    def delete_movie(movie_id):
+    def delete_movie(payload, movie_id):
         movie = Movie.query.get(movie_id)
 
         if movie is None:
@@ -205,7 +256,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies/<int:movie_id>', methods=['PATCH'])
-    def update_movie(movie_id):
+    def update_movie(payload, movie_id):
         movie = Movie.query.get(movie_id)
 
         if movie is None:
@@ -259,9 +310,18 @@ def create_app(test_config=None):
             'message': 'Bad Request'
         }), 400
 
+    
     return app
 
 APP = create_app()
+
+@APP.errorhandler(AuthError)
+def handle_auth_error(ex):
+    return jsonify({
+        "success": False,
+        "code": ex.error['code'],
+        "description": ex.error['description']
+    }), ex.status_code
 
 if __name__ == '__main__':
     APP.run(host='0.0.0.0', port=8080, debug=True)
