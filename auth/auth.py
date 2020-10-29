@@ -12,12 +12,12 @@ ENV_FILE = find_dotenv()
 if ENV_FILE:
     load_dotenv(ENV_FILE)
 
-AUTH0_CALLBACK_URL = environ.get('AUTH0_CALLBACK_URL','http://localhost:5000/callback')
-AUTH0_CLIENT_ID = environ.get('AUTH0_CLIENT_ID','rv3llI8BPjRILs8KcB58EWaokA4d6NHx')
-AUTH0_CLIENT_SECRET = environ.get('AUTH0_CLIENT_SECRET','F_u59lANTwIOP386dWVDeiPEYvfGeTL4gqfTenP17fLx7kV1R6p7EVxqVXAsXIbD')
-AUTH0_DOMAIN = environ.get('AUTH0_DOMAIN', 'dev-wr0-fzj9.us.auth0.com')
+AUTH0_CALLBACK_URL = environ.get('AUTH0_CALLBACK_URL')
+AUTH0_CLIENT_ID = environ.get('AUTH0_CLIENT_ID')
+AUTH0_CLIENT_SECRET = environ.get('AUTH0_CLIENT_SECRET')
+AUTH0_DOMAIN = environ.get('AUTH0_DOMAIN')
 AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
-AUTH0_AUDIENCE = environ.get('AUTH0_AUDIENCE', 'https://api.reliable-casting.com')
+AUTH0_AUDIENCE = environ.get('AUTH0_AUDIENCE')
 ALGORITHMS = ['RS256']
 
 
