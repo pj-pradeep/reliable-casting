@@ -16,11 +16,11 @@ from werkzeug.exceptions import HTTPException
 from six.moves.urllib.parse import urlencode
 
 
-def create_app(test_config=None):
+def create_app(config_file):
 
     # create and configure the app
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config_file)
     setup_db(app)
     # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     CORS(app)
@@ -78,7 +78,18 @@ def create_app(test_config=None):
             'picture': userinfo['picture']
         }
                
-        return render_template('dashboard.html', token=token, userInfo=userinfo)
+        return redirect('/dashboard')
+
+
+    @app.route('/dashboard')
+    @requires_authenticated_session
+    def dashboard():
+        return render_template('dashboard.html',
+                            userinfo=session['profile'],
+                            userinfo_pretty=json.dumps(session['jwt_payload'], indent=4),
+                            token=session['jwt_token'])
+
+
 
     @app.route('/api/actors', methods=['POST'])
     @requires_auth('post:actors')
@@ -111,6 +122,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors', methods=['GET'])
+    @requires_auth('get:actors')
     def list_all_actors(payload):
         actors = Actor.query.all()
 
@@ -124,6 +136,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors/<int:actor_id>', methods=['GET'])
+    @requires_auth('get:actors')
     def get_actor_by_id(payload, actor_id):
         actor = Actor.query.get(actor_id)
 
@@ -137,6 +150,7 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/api/actors/<int:actor_id>', methods=['DELETE'])
+    @requires_auth('delete:actor')
     def delete_actor(payload, actor_id):
         actor = Actor.query.get(actor_id)
 
@@ -153,6 +167,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors/<int:actor_id>', methods=['PATCH'])
+    @requires_auth('patch:actor')
     def update_actor(payload, actor_id):
         actor = Actor.query.get(actor_id)
 
@@ -188,6 +203,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies', methods=['POST'])
+    @requires_auth('post:movies')
     def create_movie(payload):
         request_body = request.get_json()
 
@@ -210,10 +226,11 @@ def create_app(test_config=None):
 
         return jsonify({
             'success': True,
-            'movies': movie.format()
+            'movie': movie.format()
         }), 201
 
     @app.route('/api/movies', methods=['GET'])
+    @requires_auth('get:movies')
     def get_movies(payload):
         movies = Movie.query.all()
 
@@ -227,6 +244,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies/<int:movie_id>', methods=['GET'])
+    @requires_auth('get:movies')
     def get_movie_by_id(payload, movie_id):
         movie = Movie.query.get(movie_id)
 
@@ -240,6 +258,7 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/api/movies/<int:movie_id>', methods=['DELETE'])
+    @requires_auth('delete:movie')
     def delete_movie(payload, movie_id):
         movie = Movie.query.get(movie_id)
 
@@ -256,6 +275,7 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies/<int:movie_id>', methods=['PATCH'])
+    @requires_auth('patch:movie')
     def update_movie(payload, movie_id):
         movie = Movie.query.get(movie_id)
 
@@ -282,7 +302,7 @@ def create_app(test_config=None):
 
         return jsonify({
             'success': True,
-            'movies': movie.format()
+            'movie': movie.format()
         }), 200
 
 
@@ -313,7 +333,7 @@ def create_app(test_config=None):
     
     return app
 
-APP = create_app()
+APP = create_app(Config)
 
 @APP.errorhandler(AuthError)
 def handle_auth_error(ex):

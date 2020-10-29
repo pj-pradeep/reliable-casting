@@ -5,9 +5,10 @@ from dotenv import load_dotenv
 
 from app.app import create_app
 from models import db
+from config import Config
 
 load_dotenv()
-app = create_app()
+app = create_app(Config)
 
 migrate = Migrate(app, db)
 manager = Manager(app)
