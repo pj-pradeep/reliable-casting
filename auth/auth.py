@@ -5,13 +5,6 @@ from jose import jwt
 from urllib.request import urlopen
 from os import environ
 
-from dotenv import load_dotenv, find_dotenv
-
-
-ENV_FILE = find_dotenv()
-if ENV_FILE:
-    load_dotenv(ENV_FILE)
-
 AUTH0_CALLBACK_URL = environ.get('AUTH0_CALLBACK_URL')
 AUTH0_CLIENT_ID = environ.get('AUTH0_CLIENT_ID')
 AUTH0_CLIENT_SECRET = environ.get('AUTH0_CLIENT_SECRET')
@@ -33,8 +26,7 @@ class AuthError(Exception):
 
 
 '''
-@TODO implement get_token_auth_header() method
-    it should attempt to get the header from the request
+    Attempt to get the header from the request
         it should raise an AuthError if no header is present
     it should attempt to split bearer and the token
         it should raise an AuthError if the header is malformed
