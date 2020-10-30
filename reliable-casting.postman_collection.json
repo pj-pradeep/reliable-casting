@@ -1,0 +1,844 @@
+{
+	"info": {
+		"_postman_id": "cd0a7663-f1d0-46b9-90bc-a876f970bba4",
+		"name": "reliable-casting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Executive Producer",
+			"item": [
+				{
+					"name": "POST /actors",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pierce Brosnan\",\n    \"gender\": \"male\",\n    \"date_of_birth\": \"1965-01-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/actors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors"
+							]
+						},
+						"description": "Add new actor"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /actors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/actors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors"
+							]
+						},
+						"description": "List all actors"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /actors/<actor_id>",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/actors/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors",
+								"4"
+							]
+						},
+						"description": "Get Actory by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE /actors/<actor_id>",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"George Clooney\",\n    \"gender\": \"Male\",\n    \"date_of_birth\": \"1950-10-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/actors/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors",
+								"5"
+							]
+						},
+						"description": "Update actor"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /actors/<actor_id>",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/actors/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors",
+								"4"
+							]
+						},
+						"description": "Delete actor"
+					},
+					"response": []
+				},
+				{
+					"name": "POST /movies",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Ocean's 11\",\n    \"release_date\": \"2005-10-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/movies",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies"
+							]
+						},
+						"description": "Create new movie"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/movies",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies"
+							]
+						},
+						"description": "List all movies"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /movies/<movie_id>",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/movies/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						},
+						"description": "Get Movie by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE /movies/<movie_id>",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Ocean's 12\",\n    \"release_date\": \"2007-10-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/movies/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"2"
+							]
+						},
+						"description": "Update movie"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /movies/<movie_id>",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/movies/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						},
+						"description": "Delete movie"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNtOUEydUUxdVRybWI2TVpDczNBZiJ9.eyJpc3MiOiJodHRwczovL2Rldi13cjAtZnpqOS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY5OTNhNTQxM2M4ZDAwMDZmM2JiYTAyIiwiYXVkIjpbImh0dHBzOi8vYXBpLnJlbGlhYmxlLWNhc3RpbmcuY29tIiwiaHR0cHM6Ly9kZXYtd3IwLWZ6ajkudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwMzk2ODIzNywiZXhwIjoxNjA0MDU0NjM3LCJhenAiOiJydjNsbEk4QlBqUklMczhLY0I1OEVXYW9rQTRkNk5IeCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3IiLCJkZWxldGU6bW92aWUiLCJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyIsInBhdGNoOmFjdG9yIiwicGF0Y2g6bW92aWUiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.rK21qP2U8r7p4qN5k1BIG6d8WND0NvkExWjFYlEqus42aPYJK344_8BwzdWNNONsogF9tD-mPEe1pZ-DBz0_-4onyddTK4eDuGsZp1gTxBACjRMpBbeuI_zmZrnQDFTF9cMoEiHDOkXcwpZ3y1nqMSI1XSiMrpPz0x_wBl1WBsKiHGg_w5mkD-ebqEHob-z6T0OBnBR3RfqiCH6zKFle4qQpVsRK2tazfyvvhuPW2udTd-d2re2D80WMVvpMqXxzDKu98_zi8qNmXhNOxvn1A9shz338mI845hWJKMoas9r9v41hbI_a-SceVTjd7hOw3JfnMxT3NjxzKPza9KO9Bg",
+						"type": "string"
+					}
+				]
+			},
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Casting Director",
+			"item": [
+				{
+					"name": "POST /actors",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pierce Brosnan\",\n    \"gender\": \"male\",\n    \"date_of_birth\": \"1965-01-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/actors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors"
+							]
+						},
+						"description": "Add new actor"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /actors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/actors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors"
+							]
+						},
+						"description": "List all actors"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /actors/<actor_id>",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/actors/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors",
+								"4"
+							]
+						},
+						"description": "Get Actory by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE /actors/<actor_id>",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"George Clooney\",\n    \"gender\": \"Male\",\n    \"date_of_birth\": \"1950-10-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/actors/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors",
+								"5"
+							]
+						},
+						"description": "Update actor"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /actors/<actor_id>",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/actors/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors",
+								"4"
+							]
+						},
+						"description": "Delete actor"
+					},
+					"response": []
+				},
+				{
+					"name": "POST /movies",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Ocean's 11\",\n    \"release_date\": \"2005-10-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/movies",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies"
+							]
+						},
+						"description": "Create new movie"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/movies",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies"
+							]
+						},
+						"description": "List all movies"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /movies/<movie_id>",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/movies/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						},
+						"description": "Get Movie by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE /movies/<movie_id>",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Ocean's 12\",\n    \"release_date\": \"2007-10-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/movies/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"2"
+							]
+						},
+						"description": "Update movie"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /movies/<movie_id>",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/movies/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						},
+						"description": "Delete movie"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNtOUEydUUxdVRybWI2TVpDczNBZiJ9.eyJpc3MiOiJodHRwczovL2Rldi13cjAtZnpqOS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY5YWFiODcyOTNiY2MwMDY5NmQ2YjI3IiwiYXVkIjpbImh0dHBzOi8vYXBpLnJlbGlhYmxlLWNhc3RpbmcuY29tIiwiaHR0cHM6Ly9kZXYtd3IwLWZ6ajkudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwMzk3MjM3MSwiZXhwIjoxNjA0MDU4NzcxLCJhenAiOiJydjNsbEk4QlBqUklMczhLY0I1OEVXYW9rQTRkNk5IeCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3IiLCJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyIsInBhdGNoOmFjdG9yIiwicGF0Y2g6bW92aWUiLCJwb3N0OmFjdG9ycyJdfQ.ZSK74HX-BlosVOIg3vQueK4gHm8pZA34N5wmnLZP3LUqpoGhtxubQZwNv6Eb69LJknlkNI8OyAeNPdzQp7f8x4xBzXim-hEbDvAwICTeLXJIjEmSnjf4sAwIclc0d5eJ7LXz0uNkps12MV8D2jc8mgUsIQaCvhL9B5xVptlgCY0P2Tj8koN-XzpDqhO44UI81ByOsB5hqFG6NmOUVmS0tVHSNXaseBjiX4eHeIK9vFAd7zErvvmQDuYCsY51GNmdg1mghXvY2CUWAGQaIGsKDKvuwYGO_tSPRrYWhxgLEM2xAY97rDcYaJaNovYVq1Dvjsy-RDP4idC4iyU2JQjwHw",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "53d5ce27-fa79-476c-8041-adbb6d734ed9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7320027a-6106-4a5e-a736-0cd034d00204",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Casting Assistant",
+			"item": [
+				{
+					"name": "POST /actors",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pierce Brosnan\",\n    \"gender\": \"male\",\n    \"date_of_birth\": \"1965-01-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/actors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors"
+							]
+						},
+						"description": "Add new actor"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /actors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/actors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors"
+							]
+						},
+						"description": "List all actors"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /actors/<actor_id>",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/actors/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors",
+								"4"
+							]
+						},
+						"description": "Get Actory by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE /actors/<actor_id>",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"George Clooney\",\n    \"gender\": \"Male\",\n    \"date_of_birth\": \"1950-10-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/actors/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors",
+								"5"
+							]
+						},
+						"description": "Update actor"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /actors/<actor_id>",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/actors/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"actors",
+								"4"
+							]
+						},
+						"description": "Delete actor"
+					},
+					"response": []
+				},
+				{
+					"name": "POST /movies",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Ocean's 11\",\n    \"release_date\": \"2005-10-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/movies",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies"
+							]
+						},
+						"description": "Create new movie"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/movies",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies"
+							]
+						},
+						"description": "List all movies"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /movies/<movie_id>",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/movies/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						},
+						"description": "Get Movie by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE /movies/<movie_id>",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Ocean's 12\",\n    \"release_date\": \"2007-10-01\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/movies/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"2"
+							]
+						},
+						"description": "Update movie"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /movies/<movie_id>",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/movies/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						},
+						"description": "Delete movie"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNtOUEydUUxdVRybWI2TVpDczNBZiJ9.eyJpc3MiOiJodHRwczovL2Rldi13cjAtZnpqOS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY5YWFjMTU3NWIyZjYwMDY5YWNmNWQ2IiwiYXVkIjpbImh0dHBzOi8vYXBpLnJlbGlhYmxlLWNhc3RpbmcuY29tIiwiaHR0cHM6Ly9kZXYtd3IwLWZ6ajkudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwMzk3MjI1MywiZXhwIjoxNjA0MDU4NjUzLCJhenAiOiJydjNsbEk4QlBqUklMczhLY0I1OEVXYW9rQTRkNk5IeCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyJdfQ.qaArTYq2K728YKfHEMgUHW866qPaMWhI6NJWDrYT4uUBx_tlSjriVkf1pehV6jMp2H1_W2loFAMDH8QoGtIU9pOtd-_6ktlH9evnlKSnbptQG8IwhX55MlRIm6dDAilKFpsIv7YNcWTzrw0qTdMJcjvrUs9PV2cspuuXxM-CS1tz4Sn5aVeLvdm8IKHbV-92sS75-zp_O9ENkxk9KbFCZYlRwbTumSsEuT9XzNsK02cgeLfWLEcoA6SKn3iaZdSepdrDmzHPIf_cGBUyBpeiV0AqxCw7xV3kG2m_L8MCRIb9OPHtt8zpBwPRd4Grht4ADwrX8Q6qmUnUKfgPKBXAoA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "17e9e033-5212-4feb-b436-67bf7c8bcc9a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "857e03e2-53a8-4c35-ad8b-d18ef5d77d56",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "7efb137e-5aaa-4d78-a478-ae99bc0246c9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "c7ec139a-205a-4da1-acde-0f436ae68ae8",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "c01e4fb1-c619-4369-b8a4-0858f186bb82",
+			"key": "host",
+			"value": "http://localhost:5000"
+		},
+		{
+			"id": "c238746e-524e-4310-8a6f-aa51b9c3ee90",
+			"value": "",
+			"disabled": true
+		}
+	],
+	"protocolProfileBehavior": {}
+}
