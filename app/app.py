@@ -22,9 +22,9 @@ def create_app(config_file):
     app = Flask(__name__)
     app.config.from_object(config_file)
     setup_db(app)
-    # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     CORS(app)
 
+    # configuring Auth0 as per documentation https://github.com/auth0-samples/auth0-python-web-app
     oauth = OAuth(app)
 
     auth0 = oauth.register(
@@ -49,15 +49,23 @@ def create_app(config_file):
     def index():
         return render_template('home.html')
 
+    # Redirects to the Auth0 login page
     @app.route('/login')
     def login():
         return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
 
+    # logout of Auth0 session. This will clear the session and invalidate the access token
     @app.route('/logout')
     def logout():
         session.clear()
         params = {'returnTo': url_for('index', _external=True), 'client_id': AUTH0_CLIENT_ID}
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
+
+    '''
+    The callback url that Auth0 is configured with. Auth0 will callback to this url
+    post authentication with the access token. The token can be used for authorizing
+    API calls.
+    '''
 
     @app.route('/callback')
     def callback_handling():
@@ -77,6 +85,7 @@ def create_app(config_file):
         }
         return redirect('/dashboard')
 
+    # The dashboard page with the access token post Auth0 authentication
     @app.route('/dashboard')
     @requires_authenticated_session
     def dashboard():
@@ -92,7 +101,6 @@ def create_app(config_file):
         request_body = request.get_json()
 
         if not request_body:
-            print('There was no request body. Not a valid request')
             abort(400)
 
         name = request_body.get('name', None)
@@ -133,7 +141,6 @@ def create_app(config_file):
         actor = Actor.query.get(actor_id)
 
         if actor is None:
-            print(f'There is no actor with id {actor_id}.')
             abort(404)
 
         return jsonify({
@@ -147,7 +154,6 @@ def create_app(config_file):
         actor = Actor.query.get(actor_id)
 
         if actor is None:
-            print(f'There is no actor with id {actor_id}.')
             abort(404)
 
         actor.delete()
@@ -162,14 +168,12 @@ def create_app(config_file):
     def update_actor(payload, actor_id):
         actor = Actor.query.get(actor_id)
 
-        if actor is None:
-            print(f'There is no actor with id {actor_id}.')
+        if actor is None:            
             abort(404)
 
         request_body = request.get_json()
 
-        if not request_body:
-            print('There was no request body. Not a valid request')
+        if not request_body:            
             abort(400)
 
         name = request_body.get('name', None)
@@ -198,14 +202,12 @@ def create_app(config_file):
         request_body = request.get_json()
 
         if not request_body:
-            print('There was no request body. Not a valid request')
             abort(400)
 
         title = request_body.get('title', None)
         release_date = request_body.get('release_date', None)
 
         if title is None or release_date is None:
-            print('Request body is missing mandatory fields required to add an actor.')
             abort(422)
 
         movie = Movie()
@@ -238,7 +240,6 @@ def create_app(config_file):
         movie = Movie.query.get(movie_id)
 
         if movie is None:
-            print(f'There is no movie with id {movie_id}.')
             abort(404)
 
         return jsonify({
@@ -252,7 +253,6 @@ def create_app(config_file):
         movie = Movie.query.get(movie_id)
 
         if movie is None:
-            print(f'There is no actor with id {movie_id}.')
             abort(404)
 
         movie.delete()
@@ -268,13 +268,11 @@ def create_app(config_file):
         movie = Movie.query.get(movie_id)
 
         if movie is None:
-            print(f'There is no actor with id {movie_id}.')
             abort(404)
 
         request_body = request.get_json()
 
         if not request_body:
-            print('There was no request body. Not a valid request')
             abort(400)
 
         title = request_body.get('title', None)
