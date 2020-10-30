@@ -15,6 +15,7 @@ EXECUTIVE_PRODUCER = ('eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNtOUEydUUxd
 CASTING_DIRECTOR = ('eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNtOUEydUUxdVRybWI2TVpDczNBZiJ9.eyJpc3MiOiJodHRwczovL2Rldi13cjAtZnpqOS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY5YWFiODcyOTNiY2MwMDY5NmQ2YjI3IiwiYXVkIjpbImh0dHBzOi8vYXBpLnJlbGlhYmxlLWNhc3RpbmcuY29tIiwiaHR0cHM6Ly9kZXYtd3IwLWZ6ajkudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwMzk3MjM3MSwiZXhwIjoxNjA0MDU4NzcxLCJhenAiOiJydjNsbEk4QlBqUklMczhLY0I1OEVXYW9rQTRkNk5IeCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3IiLCJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyIsInBhdGNoOmFjdG9yIiwicGF0Y2g6bW92aWUiLCJwb3N0OmFjdG9ycyJdfQ.ZSK74HX-BlosVOIg3vQueK4gHm8pZA34N5wmnLZP3LUqpoGhtxubQZwNv6Eb69LJknlkNI8OyAeNPdzQp7f8x4xBzXim-hEbDvAwICTeLXJIjEmSnjf4sAwIclc0d5eJ7LXz0uNkps12MV8D2jc8mgUsIQaCvhL9B5xVptlgCY0P2Tj8koN-XzpDqhO44UI81ByOsB5hqFG6NmOUVmS0tVHSNXaseBjiX4eHeIK9vFAd7zErvvmQDuYCsY51GNmdg1mghXvY2CUWAGQaIGsKDKvuwYGO_tSPRrYWhxgLEM2xAY97rDcYaJaNovYVq1Dvjsy-RDP4idC4iyU2JQjwHw')
 CASTING_ASSISTANT = ('eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNtOUEydUUxdVRybWI2TVpDczNBZiJ9.eyJpc3MiOiJodHRwczovL2Rldi13cjAtZnpqOS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY5YWFjMTU3NWIyZjYwMDY5YWNmNWQ2IiwiYXVkIjpbImh0dHBzOi8vYXBpLnJlbGlhYmxlLWNhc3RpbmcuY29tIiwiaHR0cHM6Ly9kZXYtd3IwLWZ6ajkudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwMzk3MjI1MywiZXhwIjoxNjA0MDU4NjUzLCJhenAiOiJydjNsbEk4QlBqUklMczhLY0I1OEVXYW9rQTRkNk5IeCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyJdfQ.qaArTYq2K728YKfHEMgUHW866qPaMWhI6NJWDrYT4uUBx_tlSjriVkf1pehV6jMp2H1_W2loFAMDH8QoGtIU9pOtd-_6ktlH9evnlKSnbptQG8IwhX55MlRIm6dDAilKFpsIv7YNcWTzrw0qTdMJcjvrUs9PV2cspuuXxM-CS1tz4Sn5aVeLvdm8IKHbV-92sS75-zp_O9ENkxk9KbFCZYlRwbTumSsEuT9XzNsK02cgeLfWLEcoA6SKn3iaZdSepdrDmzHPIf_cGBUyBpeiV0AqxCw7xV3kG2m_L8MCRIb9OPHtt8zpBwPRd4Grht4ADwrX8Q6qmUnUKfgPKBXAoA')
 
+
 class ReliableCastingTestCase(unittest.TestCase):
     # https://blog.k-nut.eu/flask-alembic-test
     @classmethod
@@ -23,34 +24,27 @@ class ReliableCastingTestCase(unittest.TestCase):
         APP.config['TESTING'] = True
         migrate = Migrate(APP, db)
         with APP.app_context():
-            upgrade()   
+            upgrade()
 
-    
     @classmethod
     def tearDownClass(cls):
         db.drop_all()
         db.engine.execute("DROP TABLE alembic_version")
     
-
-        
     def setUp(self):
         self.app = create_app(TestingConfig)
         self.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres@localhost:5432/reliable-casting-test'
         self.app.config['TESTING'] = True
         self.client = self.app.test_client
-              
         self.db = SQLAlchemy()
         self.db.init_app(self.app)
         
-
     def tearDown(self):
         for table in reversed(db.metadata.sorted_tables):
-            db.engine.execute(table.delete())        
+            db.engine.execute(table.delete())
         db.session.commit()
         db.session.remove()
         
-
-    #### Helper methods ###
     def create_new_actor(self):
         request_payload = {
             'name': 'Pierce Brosnan',
@@ -142,7 +136,6 @@ class ReliableCastingTestCase(unittest.TestCase):
         self.assertTrue(auth_exception.error)
         self.assertEqual(auth_exception.error['code'], 'Unauthorized Action')
 
-
     def test_get_actors_as_casting_assistant_returns_200(self):
         # first create an actor as executive producer
         new_actor = self.create_new_actor()
@@ -157,7 +150,6 @@ class ReliableCastingTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertEqual(data['actors'][0]['name'], 'Pierce Brosnan')
-
     
     def test_get_actors_as_casting_assistant_returns_404(self):
         response = self.client().get(
@@ -227,7 +219,6 @@ class ReliableCastingTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data['success'], False)        
         
-
     def test_update_actor_as_casting_director_returns_200(self):
         new_actor = self.create_new_actor()
         data = json.loads(new_actor.data)
@@ -312,10 +303,10 @@ class ReliableCastingTestCase(unittest.TestCase):
 
         with self.assertRaises(AuthError) as cm:
             response = self.client().post(
-            '/api/movies',
-            json=request_payload,
-            headers={'Authorization': f'Bearer {CASTING_ASSISTANT}'}
-        )
+                '/api/movies',
+                json=request_payload,
+                headers={'Authorization': f'Bearer {CASTING_ASSISTANT}'}
+            )
 
         auth_exception = cm.exception
         self.assertEqual(auth_exception.status_code, 401)
@@ -349,7 +340,6 @@ class ReliableCastingTestCase(unittest.TestCase):
         self.assertTrue(data['movie'])
         self.assertEqual(data['movie']['title'], 'Cast Away')
 
-
     def test_post_new_movie_as_executive_producer_returns_400(self):
         response = self.client().post(
                 '/api/movies',
@@ -360,7 +350,6 @@ class ReliableCastingTestCase(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data['success'], False)
-
 
     def test_patch_new_movie_as_casting_assistant_returns_auth_error(self):
         new_movie = self.create_new_movie()
@@ -409,7 +398,6 @@ class ReliableCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertEqual(data['movie']['title'], 'test')
 
-
     def test_get_movies_returns_200_for_existing_movies(self):
         new_movie = self.create_new_movie()
 
@@ -422,7 +410,6 @@ class ReliableCastingTestCase(unittest.TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertTrue(data['success'], True)
         self.assertTrue(data['movies'][0]['title'], 'Cast Away')
-
 
     def test_get_movie_returns_404_if_movie_does_not_exist(self):
         response = self.client().get(

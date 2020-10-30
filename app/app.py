@@ -44,7 +44,6 @@ def create_app(config_file):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, True')
         response.headers.add('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE')
         return response
-           
 
     @app.route('/')
     def index():
@@ -63,7 +62,6 @@ def create_app(config_file):
     @app.route('/callback')
     def callback_handling():
         # Handles response from token endpoint
-        
         result = auth0.authorize_access_token()
         resp = auth0.get('userinfo')
         userinfo = resp.json()
@@ -77,19 +75,16 @@ def create_app(config_file):
             'name': userinfo['name'],
             'picture': userinfo['picture']
         }
-               
         return redirect('/dashboard')
-
 
     @app.route('/dashboard')
     @requires_authenticated_session
     def dashboard():
         return render_template('dashboard.html',
-                            userinfo=session['profile'],
-                            userinfo_pretty=json.dumps(session['jwt_payload'], indent=4),
-                            token=session['jwt_token'])
-
-
+            userinfo=session['profile'],
+            userinfo_pretty=json.dumps(session['jwt_payload'], indent=4),
+            token=session['jwt_token']
+            )
 
     @app.route('/api/actors', methods=['POST'])
     @requires_auth('post:actors')
@@ -105,9 +100,8 @@ def create_app(config_file):
         date_of_birth = request_body.get('date_of_birth', None)
 
         if(name is None or gender is None or date_of_birth is None):
-            print('Request body is missing mandatory fields required to add an actor.')
             abort(422)
-        
+
         actor = Actor()
         actor.name = name
         actor.gender = gender
@@ -119,7 +113,6 @@ def create_app(config_file):
             'success': True,
             'actor': actor.format()
         }), 201
-
 
     @app.route('/api/actors', methods=['GET'])
     @requires_auth('get:actors')
@@ -133,7 +126,6 @@ def create_app(config_file):
             'success': True,
             'actors': [actor.format() for actor in actors]
         }), 200
-
 
     @app.route('/api/actors/<int:actor_id>', methods=['GET'])
     @requires_auth('get:actors')
@@ -164,7 +156,6 @@ def create_app(config_file):
             'success': True,
             'deleted': actor.id
         }), 200
-
 
     @app.route('/api/actors/<int:actor_id>', methods=['PATCH'])
     @requires_auth('patch:actor')
@@ -200,7 +191,6 @@ def create_app(config_file):
             'success': True,
             'actor': actor.format()
         }), 200
-
 
     @app.route('/api/movies', methods=['POST'])
     @requires_auth('post:movies')
@@ -242,7 +232,6 @@ def create_app(config_file):
             'movies': [movie.format() for movie in movies]
         }), 200
 
-
     @app.route('/api/movies/<int:movie_id>', methods=['GET'])
     @requires_auth('get:movies')
     def get_movie_by_id(payload, movie_id):
@@ -272,7 +261,6 @@ def create_app(config_file):
             'success': True,
             'deleted': movie.id
         }), 200
-
 
     @app.route('/api/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('patch:movie')
@@ -305,7 +293,6 @@ def create_app(config_file):
             'movie': movie.format()
         }), 200
 
-
     @app.errorhandler(422)
     def unprocessable_error(error):
         return jsonify({
@@ -328,12 +315,13 @@ def create_app(config_file):
             'success': False,
             'error': 400,
             'message': 'Bad Request'
-        }), 400
-
-    
+            }), 400
+                
     return app
 
+
 APP = create_app(Config)
+
 
 @APP.errorhandler(AuthError)
 def handle_auth_error(ex):
@@ -342,6 +330,7 @@ def handle_auth_error(ex):
         "code": ex.error['code'],
         "description": ex.error['description']
     }), ex.status_code
+
 
 if __name__ == '__main__':
     APP.run(host='0.0.0.0', port=8080, debug=True)

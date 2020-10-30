@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 
 db = SQLAlchemy()
 
+
 def setup_db(app):
     db.app = app
     db.init_app(app)
@@ -15,11 +16,13 @@ def drop_db_and_create_new_db():
     db.drop_all()
     db.create_all()
 
+
 actor_movie = db.Table(
     'actor_movie',
     Column('actor_id', db.Integer, db.ForeignKey('actors.id'), primary_key=True),
     Column('movie_id', db.Integer, db.ForeignKey('movies.id'), primary_key=True)
 )
+
 
 class Actor(db.Model):
     __tablename__ = 'actors'
@@ -49,6 +52,7 @@ class Actor(db.Model):
     def update(self):
         db.session.commit()
 
+
 class Movie(db.Model):
     __tablename__ = 'movies'
 
@@ -73,5 +77,3 @@ class Movie(db.Model):
             'title': self.title,
             'release_date': self.release_date
         }
-
-    
