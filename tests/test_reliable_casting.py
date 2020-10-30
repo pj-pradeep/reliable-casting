@@ -8,7 +8,6 @@ from app.app import APP, create_app
 from auth.auth import AuthError
 from models import setup_db, Actor, Movie, drop_db_and_create_new_db, db
 
-from dotenv import load_dotenv, find_dotenv
 from flask_migrate import upgrade, Migrate
 
 EXECUTIVE_PRODUCER = ('eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNtOUEydUUxdVRybWI2TVpDczNBZiJ9.eyJpc3MiOiJodHRwczovL2Rldi13cjAtZnpqOS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY5OTNhNTQxM2M4ZDAwMDZmM2JiYTAyIiwiYXVkIjpbImh0dHBzOi8vYXBpLnJlbGlhYmxlLWNhc3RpbmcuY29tIiwiaHR0cHM6Ly9kZXYtd3IwLWZ6ajkudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYwMzk2ODIzNywiZXhwIjoxNjA0MDU0NjM3LCJhenAiOiJydjNsbEk4QlBqUklMczhLY0I1OEVXYW9rQTRkNk5IeCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3IiLCJkZWxldGU6bW92aWUiLCJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyIsInBhdGNoOmFjdG9yIiwicGF0Y2g6bW92aWUiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.rK21qP2U8r7p4qN5k1BIG6d8WND0NvkExWjFYlEqus42aPYJK344_8BwzdWNNONsogF9tD-mPEe1pZ-DBz0_-4onyddTK4eDuGsZp1gTxBACjRMpBbeuI_zmZrnQDFTF9cMoEiHDOkXcwpZ3y1nqMSI1XSiMrpPz0x_wBl1WBsKiHGg_w5mkD-ebqEHob-z6T0OBnBR3RfqiCH6zKFle4qQpVsRK2tazfyvvhuPW2udTd-d2re2D80WMVvpMqXxzDKu98_zi8qNmXhNOxvn1A9shz338mI845hWJKMoas9r9v41hbI_a-SceVTjd7hOw3JfnMxT3NjxzKPza9KO9Bg')
@@ -44,7 +43,7 @@ class ReliableCastingTestCase(unittest.TestCase):
             db.engine.execute(table.delete())
         db.session.commit()
         db.session.remove()
-        
+
     def create_new_actor(self):
         request_payload = {
             'name': 'Pierce Brosnan',
