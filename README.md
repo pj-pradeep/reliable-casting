@@ -35,7 +35,7 @@ This will install all of the required packages we selected within the `requireme
 
 - [jose](https://python-jose.readthedocs.io/en/latest/) JavaScript Object Signing and Encryption for JWTs. Useful for encoding, decoding, and verifying JWTS.
 
-- [PostgreSQL] (https://www.postgresql.org/download/) The application uses PostgreSQL as the backend data store. Follow the link to install PostgreSQL for testing on your local machine
+- [PostgreSQL](https://www.postgresql.org/download/) The application uses PostgreSQL as the backend data store. Follow the link to install PostgreSQL for testing on your local machine
 
 ## Running the server
 
@@ -76,14 +76,14 @@ python -m unittest # this will run all the unit tests. At the end as part of the
 
 Below are the roles that are configured and their permissions
 * Casting Assistant
-# Can view actors and movies
+  * Can view actors and movies
 * Casting Director - can perform all actions
-# All permissions a Casting Assistant has and
-# Add or delete an actor from the database
-# Modify actors or movies
+  * All permissions a Casting Assistant has and
+  * Add or delete an actor from the database
+  * Modify actors or movies
 * Executive Producer 
-# All permissions a Casting Director has and…
-# Add or delete a movie from the database
+  * All permissions a Casting Director has and…
+  * Add or delete a movie from the database
 
 ### Errors
 
@@ -124,9 +124,9 @@ Import the postman collection https://github.com/pj-pradeep/reliable-casting/blo
 The collection has all the api endpoints setup. The collection has the required authorization tokens setup. 
 If the tokens have expired, we need to get new token and update PostMan for the endpoints to work
 To test the end points with Postman:
-# Navigate to https://reliable-casting.herokuapp.com/ on your browser. This will load the application home page.
-# Click on the "Try Me" button to view login credentials
-# Click the "Log In to Explore" button. This will redirect to Auth0 login page.
-# Use the sample login credentials. This will redirect to dashboard page with the access token
-# Right-clicking the collection folder for corresponding role, navigate to the authorization tab, and update the JWT in the token field.
-# Run the api in the collection
+1. Navigate to https://reliable-casting.herokuapp.com/ on your browser. This will load the application home page.
+2. Click on the "Try Me" button to view login credentials
+3. Click the "Log In to Explore" button. This will redirect to Auth0 login page.
+4. Use the sample login credentials. This will redirect to dashboard page with the access token
+5. Right-clicking the collection folder for corresponding role, navigate to the authorization tab, and update the JWT in the token field.
+6. Run the api in the collection
