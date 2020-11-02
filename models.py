@@ -19,8 +19,10 @@ def drop_db_and_create_new_db():
 
 actor_movie = db.Table(
     'actor_movie',
-    Column('actor_id', db.Integer, db.ForeignKey('actors.id'), primary_key=True),
-    Column('movie_id', db.Integer, db.ForeignKey('movies.id'), primary_key=True)
+    Column('actor_id', db.Integer, db.ForeignKey(
+        'actors.id'), primary_key=True),
+    Column('movie_id', db.Integer, db.ForeignKey(
+        'movies.id'), primary_key=True)
 )
 
 
@@ -31,7 +33,9 @@ class Actor(db.Model):
     name = Column(String(80), unique=True, nullable=False)
     date_of_birth = Column(Date, nullable=False)
     gender = Column(String(10), nullable=False)
-    movies = db.relationship('Movie', secondary=actor_movie, backref=db.backref('movies', lazy=True))
+    movies = db.relationship(
+        'Movie', secondary=actor_movie,
+        backref=db.backref('movies', lazy=True))
 
     def format(self):
         return {

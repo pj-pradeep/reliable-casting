@@ -1,15 +1,21 @@
 import os
 from config import Config
-from flask import Flask, request, abort, jsonify
+from flask import (
+    Flask,
+    request,
+    abort,
+    jsonify,
+    redirect,
+    render_template,
+    make_response,
+    session,
+    url_for
+)
+from models import (
+    Actor, Movie, setup_db
+)
 from flask_cors import CORS
 from datetime import datetime
-
-from flask import redirect
-from flask import render_template, make_response
-from flask import session
-from flask import url_for
-
-from models import Actor, Movie, setup_db
 from auth.auth import *
 from authlib.integrations.flask_client import OAuth
 from werkzeug.exceptions import HTTPException
@@ -24,7 +30,8 @@ def create_app(config_file):
     setup_db(app)
     CORS(app)
 
-    # configuring Auth0 as per documentation https://github.com/auth0-samples/auth0-python-web-app
+    # configuring Auth0
+    # documentation https://github.com/auth0-samples/auth0-python-web-app
     oauth = OAuth(app)
 
     auth0 = oauth.register(
@@ -41,8 +48,10 @@ def create_app(config_file):
 
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, True')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE')
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type, Authorization, True')
+        response.headers.add('Access-Control-Allow-Methods',
+                             'GET, PATCH, POST, DELETE')
         return response
 
     @app.route('/')
@@ -52,19 +61,22 @@ def create_app(config_file):
     # Redirects to the Auth0 login page
     @app.route('/login')
     def login():
-        return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
+        return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL,
+                                        audience=AUTH0_AUDIENCE)
 
-    # logout of Auth0 session. This will clear the session and invalidate the access token
+    # logout of Auth0 session.
+    # This will clear the session and invalidate the access token
     @app.route('/logout')
     def logout():
         session.clear()
-        params = {'returnTo': url_for('index', _external=True), 'client_id': AUTH0_CLIENT_ID}
+        params = {'returnTo': url_for(
+            'index', _external=True), 'client_id': AUTH0_CLIENT_ID}
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
     '''
-    The callback url that Auth0 is configured with. Auth0 will callback to this url
-    post authentication with the access token. The token can be used for authorizing
-    API calls.
+    The callback url that Auth0 is configured with.
+    Auth0 will callback to this url post authentication with the
+    access token. The token can be used for authorizing API calls.
     '''
 
     @app.route('/callback')
@@ -90,10 +102,11 @@ def create_app(config_file):
     @requires_authenticated_session
     def dashboard():
         return render_template('dashboard.html',
-            userinfo=session['profile'],
-            userinfo_pretty=json.dumps(session['jwt_payload'], indent=4),
-            token=session['jwt_token']
-            )
+                               userinfo=session['profile'],
+                               userinfo_pretty=json.dumps(
+                                   session['jwt_payload'], indent=4),
+                               token=session['jwt_token']
+                               )
 
     @app.route('/api/actors', methods=['POST'])
     @requires_auth('post:actors')
@@ -113,7 +126,8 @@ def create_app(config_file):
         actor = Actor()
         actor.name = name
         actor.gender = gender
-        actor.date_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d').date()
+        actor.date_of_birth = datetime.strptime(
+            date_of_birth, '%Y-%m-%d').date()
 
         actor.save()
 
@@ -168,12 +182,12 @@ def create_app(config_file):
     def update_actor(payload, actor_id):
         actor = Actor.query.get(actor_id)
 
-        if actor is None:            
+        if actor is None:
             abort(404)
 
         request_body = request.get_json()
 
-        if not request_body:            
+        if not request_body:
             abort(400)
 
         name = request_body.get('name', None)
@@ -187,7 +201,8 @@ def create_app(config_file):
             actor.gender = gender
 
         if date_of_birth:
-            actor.date_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d').date()
+            actor.date_of_birth = datetime.strptime(
+                date_of_birth, '%Y-%m-%d').date()
 
         actor.update()
 
@@ -313,8 +328,8 @@ def create_app(config_file):
             'success': False,
             'error': 400,
             'message': 'Bad Request'
-            }), 400
-                
+        }), 400
+
     return app
 
 
