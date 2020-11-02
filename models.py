@@ -1,5 +1,7 @@
 import os
-from sqlalchemy import Column, String, Integer, Date
+from sqlalchemy import (
+    Column, String, Integer, Date
+)
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
