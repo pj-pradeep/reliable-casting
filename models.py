@@ -47,7 +47,7 @@ class Actor(db.Model):
             'date_of_birth': self.date_of_birth
         }
 
-    def save(self):
+    def insert(self):
         db.session.add(self)
         db.session.commit()
 
@@ -66,7 +66,7 @@ class Movie(db.Model):
     title = Column(String(120), unique=True, nullable=False)
     release_date = Column(Date, nullable=False)
 
-    def save(self):
+    def insert(self):
         db.session.add(self)
         db.session.commit()
 

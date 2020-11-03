@@ -21,12 +21,17 @@ Follow instructions to install the latest version of python for your platform in
 
 We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
+```
+python3 venv env
+source env/bin/activate
+```
+
 #### PIP Dependencies
 
 Once you have your virtual environment setup and running, install dependencies by naviging to the `/backend` directory and running:
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 This will install all of the required packages we selected within the `requirements.txt` file.
@@ -54,7 +59,7 @@ The application uses Auth0 for authentication and authorization of the api calls
 ```bash
 createdb reliable-casting # or any databasename of your choice. Update the DB connection url in setup.sh before running
 source setup.sh # this will setup all the environment variables required to run application successfully
-python manage.py db upgrade # This will run the migrations and creates all the required DB tables
+python3 manage.py db upgrade # This will run the migrations and creates all the required DB tables
 flask run --reload
 ```
 
@@ -67,7 +72,7 @@ From within the root project directory first ensure you are working using your c
 ```bash
 createdb reliable-casting-test
 source setup.sh # this will setup all the environment variables required to run application successfully
-python -m unittest # this will run all the unit tests. At the end as part of the teardown all the tables will be deleted
+python3 -m unittest # this will run all the unit tests. At the end as part of the teardown all the tables will be deleted
 ```
 
 ## REST API Reference
@@ -151,6 +156,26 @@ curl http://127.0.0.1:5000/api/movies
 }
 ```
 
+GET /api/movies/{movie_id}
+- Fetches with the specified ID if exists
+- Request Arguments: movie_id
+- Allowed users: Executive Producer, Casting Assistant and casting Director
+- Required permission (get:movies)
+
+Sample request/response
+```
+curl http://127.0.0.1:5000/api/movies/2
+
+{
+    "movies": {
+        "id": 2,
+        "release_date": "Mon, 01 Jan 2007 00:00:00 GMT",
+        "title": "Oceans 11"
+    },
+    "success": true
+}
+```
+
 POST /api/movies
 - Creates a new movie with the provided parameters
 - Request Arguments: None
@@ -163,7 +188,7 @@ POST /api/movies
 
 Sample request/response
 ```
-curl http://127.0.0.1:5000/api/movies -X POST -H "Content-Type: application/json" -d '{ "title": "Cast Away", "release_date": "2006-01-01" }'
+curl http://127.0.0.1:5000/api/movies -X POST -H "Content-Type: application/json" -d '{ "title": "Oceans 11", "release_date": "2007-01-01" }'
 
 {
     "movie": {
@@ -175,7 +200,167 @@ curl http://127.0.0.1:5000/api/movies -X POST -H "Content-Type: application/json
 }
 ```
 
+PATCH /api/movies/{movie_id}
+- Updates a specific movie with the provided parameters
+- Request Arguments: movie_id
+- Allowed users: Executive Producer, Casting Director
+- Required permission (patch:movies)
+- Request Body: {
+    "title": "Ocean's 12",
+    "release_date": "2007-10-01"
+}
 
+Sample request/response
+```
+curl http://127.0.0.1:5000/apis/movies/2 -X PATCH -H "Content-Type: application/json" -d '{"title": "Ocean's 12","release_date": "2007-10-01"}'
+
+{
+    "movie": {
+        "id": 2,
+        "release_date": "Mon, 01 Oct 2007 00:00:00 GMT",
+        "title": "Ocean's 12"
+    },
+    "success": true
+}
+```
+
+DELETE /api/movies/{movie_id}
+- Deletes a specific movie
+- Request Arguments: movie_id (The ID of the movie to delete)
+- Allowed users: Executive Producer
+- Required permission (delete:movie)
+
+Sample request/response
+```
+curl http://127.0.0.1:5000/api/movies/2 -X DELETE
+
+{
+    "deleted": 2,
+    "success": true
+}
+```
+
+GET /api/actors
+- Retrieves all actors from the database
+- Request Arguments: None
+- Allowed users: Executive Producer, Casting Assistant and casting Director
+- Required permission (get:actors)
+
+Sample request/response
+```
+curl http://127.0.0.1:5000/api/actors
+
+{
+    "actors": [
+        {
+            "date_of_birth": "Tue, 01 Dec 1970 00:00:00 GMT",
+            "gender": "female",
+            "id": 1,
+            "name": "Sandra Bullock"
+        },
+        {
+            "date_of_birth": "Thu, 01 Dec 1960 00:00:00 GMT",
+            "gender": "male",
+            "id": 2,
+            "name": "George Clooney"
+        }
+    ],
+    "success": true
+}
+```
+
+
+GET /api/actors/{actor_id}
+- Fetch actor with specified id if exists
+- Request Arguments: actor_id
+- Allowed users: Executive Producer, Casting Assistant and casting Director
+- Required permission (get:actors)
+
+Sample request/response
+```
+curl http://127.0.0.1:5000/api/actors/2
+
+{
+    "actor": {
+        "date_of_birth": "Thu, 01 Dec 1960 00:00:00 GMT",
+        "gender": "male",
+        "id": 2,
+        "name": "George Clooney"
+    },
+    "success": true
+}
+```
+
+
+POST /api/actors
+- Creates a new actor with the provided parameters
+- Request Arguments: None
+- Allowed users: Executive Producer and casting Director
+- Required permission (post:actors)
+- Request Body: {
+    "name": "Tom Hanks",
+    "gender": "male",
+    "date_of_birth": "1960-12-01"
+}
+
+Sample request/response
+```
+curl http://127.0.0.1:5000/api/actors -X POST -H "Content-Type: application/json" -d '{"name": "Tom Hanks","gender": "male","date_of_birth": "1960-12-01"}'
+
+{
+    "actor": {
+        "date_of_birth": "Thu, 01 Dec 1960 00:00:00 GMT",
+        "gender": "male",
+        "id": 3,
+        "name": "Tom Hanks"
+    },
+    "success": true
+}
+```
+
+
+PATCH /api/actors/{actor_id}
+- Updates a specific actor with the provided parameters
+- Request Arguments: actor_id (The ID of the actor to update)
+- Allowed users: Executive Producer and Casting Director
+- Required permission (patch:actor)
+- Request Body: {
+    "name": "George Clooney",
+    "gender": "Male",
+    "date_of_birth": "1950-10-01"
+}
+Sample request/response
+```
+curl http://127.0.0.1:5000/api/actors/3 -X PATCH -H "Content-Type: application/json" -d '{"name": "George Clooney","gender": "Male","date_of_birth": "1950-10-01"}'
+
+{
+    "actor": {
+        "date_of_birth": "Sun, 01 Oct 1950 00:00:00 GMT",
+        "gender": "Male",
+        "id": 2,
+        "name": "George Clooney"
+    },
+    "success": true
+}
+```
+
+
+DELETE /api/actors/{actor_id}
+- Deletes a specific actor
+- Request Arguments: actor_id 
+- Required permission (delete:actor)
+
+Sample request/response
+```
+curl http://127.0.0.1:5000/api/actors/3 -X DELETE
+
+{
+    "deleted": 3,
+    "success": true
+}
+```
+
+### Integration testing
 
 Import the postman collection https://github.com/pj-pradeep/reliable-casting/blob/master/reliable-casting.postman_collection.json
 

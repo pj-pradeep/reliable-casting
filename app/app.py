@@ -129,7 +129,7 @@ def create_app(config_file):
         actor.date_of_birth = datetime.strptime(
             date_of_birth, '%Y-%m-%d').date()
 
-        actor.save()
+        actor.insert()
 
         return jsonify({
             'success': True,
@@ -229,7 +229,7 @@ def create_app(config_file):
         movie.title = title
         movie.release_date = datetime.strptime(release_date, '%Y-%m-%d').date()
 
-        movie.save()
+        movie.insert()
 
         return jsonify({
             'success': True,
