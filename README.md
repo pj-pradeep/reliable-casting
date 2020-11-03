@@ -131,7 +131,7 @@ GET /movies
 - Required permission (get:movies)
 
 Sample request/response
-`
+```
 curl http://127.0.0.1:5000/api/movies
 
 {
@@ -149,9 +149,31 @@ curl http://127.0.0.1:5000/api/movies
     ],
     "success": true
 }
-`
+```
 
+POST /api/movies
+- Creates a new movie with the provided parameters
+- Request Arguments: None
+- Allowed users: Executive Producer
+- Required permission (post:movies)
+- Request Body: {
+	"title": <title_name>
+	"release_date": <release_date>
+}
 
+Sample request/response
+```
+curl http://127.0.0.1:5000/api/movies -X POST -H "Content-Type: application/json" -d '{ "title": "Cast Away", "release_date": "2006-01-01" }'
+
+{
+    "movie": {
+        "id": 2,
+        "release_date": "Mon, 01 Jan 2007 00:00:00 GMT",
+        "title": "Oceans 11"
+    },
+    "success": true
+}
+```
 
 
 
