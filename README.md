@@ -4,6 +4,10 @@ Reliable Casting is a project that models a company that is responsible for crea
 
 Application also uses Auth0 to authenticate and authorize users. Roles and permission tables are configured in Auth0. Access of roles is limited and includes three roles with different permissions. The JWT includes the RBAC permission claims. 
 
+## Motivation
+
+The project is an attempt to design and build databases for software applications, create and deploy database-backed web APIs, secure and manage user authentication and access control for an application backend. To make the API accessible over internet, the application had to be deployed to the cloud using Heroku.
+
 
 ## Getting Started
 
@@ -118,6 +122,38 @@ Error Code | Error Message
 
 
 ### API Endpoints
+
+
+GET /movies
+- Fetches all movies on the platform
+- Request Arguments: None
+- Allowed users: Executive Producer, Casting Assistant and casting Director
+- Required permission (get:movies)
+
+Sample request/response
+`
+curl http://127.0.0.1:5000/api/movies
+
+{
+    "movies": [
+        {
+            "id": 1,
+            "release_date": "Fri, 01 Dec 2006 00:00:00 GMT",
+            "title": "Cast Away"
+        },
+        {
+            "id": 2,
+            "release_date": "Mon, 01 Jan 2007 00:00:00 GMT",
+            "title": "Oceans 11"
+        }
+    ],
+    "success": true
+}
+`
+
+
+
+
 
 Import the postman collection https://github.com/pj-pradeep/reliable-casting/blob/master/reliable-casting.postman_collection.json
 
